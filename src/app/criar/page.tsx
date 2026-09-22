@@ -38,17 +38,10 @@ const CATEGORY_EMOJI: Record<Category, string> = Object.fromEntries(
   CATEGORY_GROUPS.flatMap((g) => g.options.map((o) => [o.value, o.emoji]))
 ) as Record<Category, string>;
 
-const THEME_PLACEHOLDER: Record<Category, string> = {
-  movie: 'Ex: "Top 10 filmes de terror"',
-  tv: 'Ex: "Top 5 séries de anime"',
-  movie_character: 'Ex: "Top 10 vilões do cinema"',
-  music_track: 'Ex: "Top 10 músicas do Linkin Park"',
-  music_artist: 'Ex: "Top 5 bandas de rock"',
-  music_album: 'Ex: "Top 10 álbuns dos anos 2000"',
-  game: 'Ex: "Top 5 jogos de PS2"',
-  food: 'Ex: "Top 10 comidas brasileiras"',
-  general: 'Ex: "Top 10 cidades para viajar"',
-};
+function autoTheme(category: Category, topSize: number) {
+  if (category === "general") return `Top ${topSize}`;
+  return `Top ${topSize} ${CATEGORY_LABELS[category]}`;
+}
 
 const TOP_SIZE_OPTIONS = [3, 5, 10];
 const DURATION_OPTIONS = [
@@ -60,13 +53,27 @@ const DURATION_OPTIONS = [
 
 export default function CriarSalaPage() {
   const router = useRouter();
-  const [theme, setTheme] = useState("");
   const [category, setCategory] = useState<Category>("movie");
   const [topSize, setTopSize] = useState(10);
   const [durationSeconds, setDurationSeconds] = useState(180);
+  const [theme, setTheme] = useState(() => autoTheme("movie", 10));
+  const [themeTouched, setThemeTouched] = useState(false);
   const [hostName, setHostName] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Keep the theme in sync with category/top size until the user edits it
+  // by hand — gives them a ready-to-tweak starting point instead of a
+  // blank field.
+  function handleCategoryChange(next: Category) {
+    setCategory(next);
+    if (!themeTouched) setTheme(autoTheme(next, topSize));
+  }
+
+  function handleTopSizeChange(next: number) {
+    setTopSize(next);
+    if (!themeTouched) setTheme(autoTheme(category, next));
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -111,7 +118,7 @@ export default function CriarSalaPage() {
             <select
               className="input-field w-full rounded-xl pl-11 pr-10 py-3 appearance-none cursor-pointer"
               value={category}
-              onChange={(e) => setCategory(e.target.value as Category)}
+              onChange={(e) => handleCategoryChange(e.target.value as Category)}
             >
               {CATEGORY_GROUPS.map((group) => (
                 <optgroup key={group.label} label={group.label}>
@@ -129,27 +136,15 @@ export default function CriarSalaPage() {
           </div>
         </div>
 
-        <div>
-          <label className="block font-semibold mb-2">2. Dê um nome ao Top</label>
-          <input
-            className="input-field w-full rounded-xl px-4 py-3"
-            placeholder={THEME_PLACEHOLDER[category]}
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            maxLength={120}
-            required
-          />
-        </div>
-
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block font-semibold mb-2">Posições</label>
-            <div className="flex gap-2">
+            <label className="block font-semibold mb-2">2. Posições</label>
+            <div className="flex gap-2 mb-2">
               {TOP_SIZE_OPTIONS.map((n) => (
                 <button
                   type="button"
                   key={n}
-                  onClick={() => setTopSize(n)}
+                  onClick={() => handleTopSizeChange(n)}
                   className={`flex-1 rounded-xl px-3 py-2.5 border transition font-semibold ${
                     topSize === n
                       ? "border-primary bg-primary/15 text-white"
@@ -160,11 +155,25 @@ export default function CriarSalaPage() {
                 </button>
               ))}
             </div>
+            <label className="flex items-center gap-2 text-xs text-text-muted">
+              ou digite:
+              <input
+                type="number"
+                min={3}
+                max={20}
+                value={topSize}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  if (Number.isInteger(n)) handleTopSizeChange(Math.min(20, Math.max(3, n)));
+                }}
+                className="input-field w-16 rounded-lg px-2 py-1 text-text text-sm"
+              />
+            </label>
           </div>
 
           <div>
             <label className="block font-semibold mb-2">Tempo</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 mb-2">
               {DURATION_OPTIONS.map((d) => (
                 <button
                   type="button"
@@ -180,7 +189,35 @@ export default function CriarSalaPage() {
                 </button>
               ))}
             </div>
+            <label className="flex items-center gap-2 text-xs text-text-muted">
+              ou digite (min):
+              <input
+                type="number"
+                min={1}
+                max={60}
+                value={Math.round(durationSeconds / 60)}
+                onChange={(e) => {
+                  const n = Number(e.target.value);
+                  if (Number.isInteger(n)) setDurationSeconds(Math.min(60, Math.max(1, n)) * 60);
+                }}
+                className="input-field w-16 rounded-lg px-2 py-1 text-text text-sm"
+              />
+            </label>
           </div>
+        </div>
+
+        <div>
+          <label className="block font-semibold mb-2">3. Dê um nome ao Top</label>
+          <input
+            className="input-field w-full rounded-xl px-4 py-3"
+            value={theme}
+            onChange={(e) => {
+              setTheme(e.target.value);
+              setThemeTouched(true);
+            }}
+            maxLength={120}
+            required
+          />
         </div>
 
         <div>
