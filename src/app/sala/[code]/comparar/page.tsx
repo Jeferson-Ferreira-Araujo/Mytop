@@ -19,7 +19,6 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
   const [participants, setParticipants] = useState<RevealParticipant[] | null>(null);
   const [highlights, setHighlights] = useState<Highlight[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!getRoomSession(code)) {
@@ -31,7 +30,6 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
         setRoom(data.room);
         setParticipants(data.participants);
         setHighlights(data.highlights);
-        setSelectedId(data.participants[0]?.participant.id ?? null);
       })
       .catch((err) => setError(err instanceof Error ? err.message : "Erro ao carregar comparação"));
   }, [code, router]);
@@ -56,8 +54,6 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
       </main>
     );
   }
-
-  const selected = participants.find((p) => p.participant.id === selectedId) ?? participants[0];
 
   return (
     <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 py-8 flex flex-col gap-8">
@@ -116,49 +112,52 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
         </table>
       </section>
 
-      {/* Mobile: one participant at a time */}
-      <section className="lg:hidden flex flex-col gap-3 animate-fade-up">
-        <div className="flex gap-2 overflow-x-auto pb-1">
-          {participants.map((p) => (
-            <button
-              key={p.participant.id}
-              onClick={() => setSelectedId(p.participant.id)}
-              className={`flex items-center gap-2 rounded-full px-3 py-1.5 border shrink-0 transition ${
-                selected.participant.id === p.participant.id
-                  ? "border-primary bg-primary/15"
-                  : "border-border bg-bg-elevated"
-              }`}
-            >
-              <Avatar name={p.participant.name} size={24} />
-              <span className="text-sm font-medium">{p.participant.name}</span>
-            </button>
-          ))}
-        </div>
-        <div className="flex flex-col gap-2">
-          {positions.map((pos) => {
-            const item = selected.items.find((i) => i.position === pos);
-            return (
-              <div key={pos} className="glass-card rounded-xl p-2.5 flex items-center gap-3">
-                <span className="font-display font-extrabold text-text-muted w-5 text-center">{pos}</span>
-                {item ? (
-                  <>
-                    <ItemImage
-                      src={item.image_url}
-                      alt={item.name}
-                      className="w-11 h-11 rounded-lg object-cover shrink-0"
-                    />
-                    <div className="min-w-0">
-                      <p className="text-sm font-medium truncate">{item.name}</p>
-                      {item.subtitle && <p className="text-xs text-text-muted truncate">{item.subtitle}</p>}
-                    </div>
-                  </>
-                ) : (
-                  <span className="text-text-muted text-sm">—</span>
-                )}
+      {/* Mobile: everyone's Top stacked together, no tab-switching needed */}
+      <section className="lg:hidden flex flex-col gap-5 animate-fade-up">
+        {participants.map((p, pi) => (
+          <div
+            key={p.participant.id}
+            className="glass-card rounded-2xl p-4 animate-pop-in"
+            style={{ animationDelay: `${Math.min(pi, 6) * 0.08}s` }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <Avatar name={p.participant.name} size={40} ring />
+              <div className="min-w-0">
+                <p className="text-xs text-text-muted">Assim ficou o Top de</p>
+                <p className="font-display font-bold text-lg truncate">{p.participant.name}</p>
               </div>
-            );
-          })}
-        </div>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {positions.map((pos) => {
+                const item = p.items.find((i) => i.position === pos);
+                return (
+                  <div key={pos} className="flex items-center gap-3 rounded-xl bg-bg-elevated/70 p-2">
+                    <span className="w-7 text-center font-display font-bold text-sm text-text-muted shrink-0">
+                      {pos}
+                    </span>
+                    {item ? (
+                      <>
+                        <ItemImage
+                          src={item.image_url}
+                          alt={item.name}
+                          className="w-10 h-10 rounded-lg object-cover shrink-0"
+                        />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium truncate">{item.name}</p>
+                          {item.subtitle && (
+                            <p className="text-xs text-text-muted truncate">{item.subtitle}</p>
+                          )}
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-text-muted text-sm">—</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        ))}
       </section>
 
       {/* Highlights */}

@@ -77,7 +77,7 @@ export function computeHighlights(
   for (const g of unanimous) {
     highlights.push({
       type: "unanime",
-      emoji: "🔥",
+      emoji: "🙌",
       headline: `${g.item.name} apareceu no Top de todos!`,
       detail: `Escolhido pelos ${n} participantes.`,
       item: g.item,

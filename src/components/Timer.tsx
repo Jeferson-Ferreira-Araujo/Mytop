@@ -15,10 +15,10 @@ export function Timer({
   const urgent = remainingSeconds <= 10;
   const warning = !urgent && fraction < 0.25;
 
-  const color = urgent ? "var(--danger)" : warning ? "#fbbf24" : "var(--accent)";
+  const color = urgent ? "var(--danger)" : warning ? "var(--primary-2)" : "var(--accent)";
 
   return (
-    <div className="glass-card rounded-2xl px-5 py-3 flex items-center gap-4 min-w-[180px]">
+    <div className="glass-card rounded-2xl px-4 sm:px-5 py-3 flex items-center gap-3 sm:gap-4 w-[150px] sm:w-[180px]">
       <span
         className={`font-display text-2xl font-extrabold tabular-nums ${urgent ? "animate-pulse" : ""}`}
         style={{ color }}

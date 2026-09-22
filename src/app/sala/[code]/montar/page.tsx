@@ -281,11 +281,11 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
   return (
     <main className="flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 py-6 flex flex-col gap-5">
       <header className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-        <div>
+        <div className="min-w-0">
           <p className="text-text-muted text-xs mb-0.5">{CATEGORY_LABELS[room.category]}</p>
-          <h1 className="font-display text-xl sm:text-2xl font-extrabold">{room.theme}</h1>
+          <h1 className="font-display text-xl sm:text-2xl font-extrabold break-words">{room.theme}</h1>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {remainingMs !== null && (
             <Timer remainingMs={remainingMs} totalMs={room.duration_seconds * 1000} />
           )}
@@ -311,7 +311,7 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
           </div>
         </div>
       ) : (
-        <div className="grid lg:grid-cols-[1fr_1.1fr_0.8fr] gap-5">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.1fr_0.8fr] gap-5">
           {/* Search column */}
           <section className="glass-card rounded-2xl p-4 flex flex-col gap-3 min-h-[320px]">
             <p className="font-semibold text-sm">Pesquisar</p>

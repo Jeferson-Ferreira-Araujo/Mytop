@@ -51,7 +51,7 @@ export default function Home() {
           ))}
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12 w-full">
           {STEPS.map((step, i) => (
             <div
               key={step.title}
