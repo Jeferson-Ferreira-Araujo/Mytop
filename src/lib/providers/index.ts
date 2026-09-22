@@ -1,0 +1,31 @@
+import "server-only";
+import type { Category, SearchResultItem } from "@/lib/types";
+import { searchTmdb } from "./tmdb";
+import { searchSpotify } from "./spotify";
+import { searchIgdb } from "./igdb";
+import { searchTheMealDb } from "./themealdb";
+import { searchUnsplash } from "./unsplash";
+
+export async function searchByCategory(
+  category: Category,
+  query: string
+): Promise<SearchResultItem[]> {
+  switch (category) {
+    case "movie":
+    case "tv":
+    case "movie_character":
+      return searchTmdb(category, query);
+    case "music_track":
+    case "music_artist":
+    case "music_album":
+      return searchSpotify(category, query);
+    case "game":
+      return searchIgdb(query);
+    case "food":
+      return searchTheMealDb(query);
+    case "general":
+      return searchUnsplash(query);
+    default:
+      throw new Error(`Categoria desconhecida: ${category}`);
+  }
+}
