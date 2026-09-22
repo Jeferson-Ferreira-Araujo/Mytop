@@ -58,11 +58,15 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
   return (
     <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 py-8 flex flex-col gap-8">
       <header className="text-center animate-fade-up">
-        <p className="text-text-muted text-sm mb-1">{CATEGORY_LABELS[room.category]}</p>
-        <h1 className="font-display text-2xl sm:text-4xl font-extrabold">
-          <span className="gradient-text">{room.theme}</span>
+        <h1 className="font-display text-2xl sm:text-4xl font-extrabold flex items-center justify-center gap-2">
+          <span aria-hidden>🎉</span>
+          <span className="gradient-text">Tops revelados!</span>
         </h1>
         <p className="text-text-muted mt-1">Veja como cada um montou o próprio Top.</p>
+        <p className="text-sm mt-2">
+          <span className="font-semibold">{room.theme}</span>
+          <span className="text-text-muted"> · {CATEGORY_LABELS[room.category]}</span>
+        </p>
       </header>
 
       {/* Desktop grid — great for OBS capture */}
@@ -164,7 +168,7 @@ export default function CompararPage({ params }: { params: Promise<{ code: strin
       {highlights.length > 0 && (
         <section className="animate-fade-up">
           <h2 className="font-display font-bold text-lg mb-3">Destaques da rodada</h2>
-          <div className="flex flex-wrap gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
             {highlights.map((h, i) => (
               <HighlightCard key={i} highlight={h} />
             ))}

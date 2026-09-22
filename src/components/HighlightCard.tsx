@@ -14,7 +14,7 @@ export function HighlightCard({ highlight }: { highlight: Highlight }) {
   const style = STYLES[highlight.type];
   return (
     <div
-      className="glass-card rounded-2xl p-4 flex flex-col gap-1.5 min-w-[220px]"
+      className="glass-card rounded-2xl p-4 flex flex-col gap-1.5 min-w-0"
       style={{ borderColor: `color-mix(in srgb, ${style.color} 45%, var(--border))` }}
     >
       <span

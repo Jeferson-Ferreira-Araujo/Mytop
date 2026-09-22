@@ -13,7 +13,7 @@ import {
 } from "@dnd-kit/core";
 import {
   SortableContext,
-  verticalListSortingStrategy,
+  rectSortingStrategy,
   arrayMove,
 } from "@dnd-kit/sortable";
 
@@ -34,7 +34,7 @@ import { CATEGORY_LABELS, type Participant, type RankingItem, type Room, type Se
 import { Timer } from "@/components/Timer";
 import { ProgressList } from "@/components/ProgressList";
 import { SearchResultCard } from "@/components/SearchResultCard";
-import { SortableRankingItem } from "@/components/SortableRankingItem";
+import { SortableRankingGridItem } from "@/components/SortableRankingGridItem";
 
 export default function MontarPage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = use(params);
@@ -281,18 +281,29 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
   return (
     <main className="flex-1 mx-auto w-full max-w-6xl px-4 sm:px-6 py-6 flex flex-col gap-5">
       <header className="flex flex-col sm:flex-row sm:items-center gap-4 justify-between">
-        <div className="min-w-0">
-          <p className="text-text-muted text-xs mb-0.5">{CATEGORY_LABELS[room.category]}</p>
-          <h1 className="font-display text-xl sm:text-2xl font-extrabold break-words">{room.theme}</h1>
+        <div className="min-w-0 flex items-center gap-3">
+          <span className="text-2xl shrink-0">🎬</span>
+          <div className="min-w-0">
+            <h1 className="font-display text-xl sm:text-2xl font-extrabold break-words leading-tight">
+              {room.theme}
+            </h1>
+            <span className="inline-flex items-center gap-1 text-xs text-text-muted bg-bg-elevated border border-border rounded-full px-2 py-0.5 mt-1">
+              📁 {CATEGORY_LABELS[room.category]}
+            </span>
+          </div>
         </div>
         <div className="flex flex-wrap items-center gap-3">
           {remainingMs !== null && (
             <Timer remainingMs={remainingMs} totalMs={room.duration_seconds * 1000} />
           )}
+          <span className="text-sm text-text-muted whitespace-nowrap">
+            💬 {myItems.length}/{room.top_size}
+          </span>
           <button
             onClick={handleFinish}
             disabled={finished || finishing}
-            className="btn-primary rounded-xl px-5 py-3 text-sm whitespace-nowrap disabled:opacity-60"
+            className="rounded-xl px-5 py-3 text-sm font-bold whitespace-nowrap disabled:opacity-60 transition"
+            style={{ background: "var(--success)", color: "#0a1f14" }}
           >
             {finished ? "Top finalizado ✓" : finishing ? "Enviando..." : "Finalizar meu Top"}
           </button>
@@ -354,10 +365,13 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
               </p>
             ) : (
               <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-                <SortableContext items={myItems.map((i) => i.id)} strategy={verticalListSortingStrategy}>
-                  <div className="flex flex-col gap-2">
+                <SortableContext items={myItems.map((i) => i.id)} strategy={rectSortingStrategy}>
+                  <div
+                    className="grid gap-2.5"
+                    style={{ gridTemplateColumns: `repeat(${Math.min(room.top_size, 5)}, minmax(0, 1fr))` }}
+                  >
                     {myItems.map((item, idx) => (
-                      <SortableRankingItem
+                      <SortableRankingGridItem
                         key={item.id}
                         item={item}
                         position={idx + 1}
