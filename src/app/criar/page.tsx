@@ -33,6 +33,10 @@ const CATEGORY_GROUPS: { label: string; options: { value: Category; emoji: strin
   },
 ];
 
+const CATEGORY_EMOJI: Record<Category, string> = Object.fromEntries(
+  CATEGORY_GROUPS.flatMap((g) => g.options.map((o) => [o.value, o.emoji]))
+) as Record<Category, string>;
+
 const THEME_PLACEHOLDER: Record<Category, string> = {
   movie: 'Ex: "Top 10 filmes de terror"',
   tv: 'Ex: "Top 5 séries de anime"',
@@ -93,28 +97,28 @@ export default function CriarSalaPage() {
       <form onSubmit={handleSubmit} className="flex flex-col gap-7">
         <div>
           <label className="block font-semibold mb-2">1. Escolha a categoria</label>
-          <div className="flex flex-col gap-3">
-            {CATEGORY_GROUPS.map((group) => (
-              <div key={group.label}>
-                <p className="text-xs uppercase tracking-wide text-text-muted mb-1.5">{group.label}</p>
-                <div className="flex flex-wrap gap-2">
+          <div className="relative">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg">
+              {CATEGORY_EMOJI[category]}
+            </span>
+            <select
+              className="input-field w-full rounded-xl pl-11 pr-10 py-3 appearance-none cursor-pointer"
+              value={category}
+              onChange={(e) => setCategory(e.target.value as Category)}
+            >
+              {CATEGORY_GROUPS.map((group) => (
+                <optgroup key={group.label} label={group.label}>
                   {group.options.map((opt) => (
-                    <button
-                      type="button"
-                      key={opt.value}
-                      onClick={() => setCategory(opt.value)}
-                      className={`rounded-xl px-4 py-2.5 border transition ${
-                        category === opt.value
-                          ? "border-primary bg-primary/15 text-white"
-                          : "border-border bg-bg-elevated text-text-muted hover:border-primary/60"
-                      }`}
-                    >
-                      {opt.emoji} {CATEGORY_LABELS[opt.value]}
-                    </button>
+                    <option key={opt.value} value={opt.value}>
+                      {CATEGORY_LABELS[opt.value]}
+                    </option>
                   ))}
-                </div>
-              </div>
-            ))}
+                </optgroup>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-text-muted">
+              ▾
+            </span>
           </div>
         </div>
 
