@@ -21,7 +21,7 @@ amigos, lives e vídeos.
 ## Stack
 
 Next.js (App Router) + TypeScript + Tailwind CSS + Supabase (Postgres +
-Realtime) + APIs externas por categoria (TMDB, Spotify, IGDB, TheMealDB,
+Realtime) + APIs externas por categoria (TMDB, Deezer, IGDB, TheMealDB,
 Unsplash). Sem autenticação, sem catálogo próprio, sem microserviços —
 propositalmente simples.
 
@@ -75,7 +75,7 @@ npm run dev
 | Categoria | Provider | Variáveis | Observação |
 |---|---|---|---|
 | Filmes / Séries / Personagens | [TMDB](https://www.themoviedb.org/settings/api) | `TMDB_API_KEY` | "Personagens" busca por ator/atriz (`search/person`) — o TMDB não tem busca de personagem por nome. |
-| Músicas / Artistas / Álbuns | [Spotify](https://developer.spotify.com/dashboard) | `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` | Client Credentials flow (sem login de usuário). |
+| Músicas / Artistas / Álbuns | [Deezer](https://developers.deezer.com/api) | _(nenhuma)_ | API pública, sem autenticação. Trocamos de Spotify para Deezer porque, desde fev/2026, o Modo de Desenvolvimento do Spotify passou a exigir conta Premium do desenvolvedor. |
 | Jogos | [IGDB](https://api-docs.igdb.com/#getting-started) | `IGDB_CLIENT_ID`, `IGDB_CLIENT_SECRET` | Autenticação via app token do Twitch. |
 | Comidas | [TheMealDB](https://www.themealdb.com/api.php) | `THEMEALDB_API_KEY` | Funciona sem chave própria (usa a chave de teste `1` por padrão). |
 | Tema livre (genérico) | [Unsplash](https://unsplash.com/developers) | `UNSPLASH_ACCESS_KEY` | Busca de fotos com `content_filter=high`; o nome do item é o texto pesquisado. |
@@ -114,7 +114,7 @@ src/
     api/                          Rotas de servidor (rooms, rankings, search, time)
   components/                     UI compartilhada (Avatar, Timer, cards, etc.)
   lib/
-    providers/                    Um arquivo por integração externa (TMDB, Spotify, IGDB, TheMealDB, Unsplash)
+    providers/                    Um arquivo por integração externa (TMDB, Deezer, IGDB, TheMealDB, Unsplash)
     highlights.ts                 Cálculo dos destaques (unânime, consenso, discordância, etc.)
     supabase/                     Clientes browser (anon) e server (service role)
     safety.ts                     Filtro de termos bloqueados

@@ -9,7 +9,7 @@ export type Category =
   | "food"
   | "general";
 
-export type Provider = "tmdb" | "spotify" | "igdb" | "themealdb" | "unsplash";
+export type Provider = "tmdb" | "deezer" | "igdb" | "themealdb" | "unsplash";
 
 export type RoomStatus = "lobby" | "running" | "reveal" | "finished";
 
@@ -92,9 +92,9 @@ export const CATEGORY_PROVIDER: Record<Category, Provider> = {
   movie: "tmdb",
   tv: "tmdb",
   movie_character: "tmdb",
-  music_track: "spotify",
-  music_artist: "spotify",
-  music_album: "spotify",
+  music_track: "deezer",
+  music_artist: "deezer",
+  music_album: "deezer",
   game: "igdb",
   food: "themealdb",
   general: "unsplash",

@@ -1,7 +1,7 @@
 import "server-only";
 import type { Category, SearchResultItem } from "@/lib/types";
 import { searchTmdb } from "./tmdb";
-import { searchSpotify } from "./spotify";
+import { searchDeezer } from "./deezer";
 import { searchIgdb } from "./igdb";
 import { searchTheMealDb } from "./themealdb";
 import { searchUnsplash } from "./unsplash";
@@ -18,7 +18,7 @@ export async function searchByCategory(
     case "music_track":
     case "music_artist":
     case "music_album":
-      return searchSpotify(category, query);
+      return searchDeezer(category, query);
     case "game":
       return searchIgdb(query);
     case "food":
