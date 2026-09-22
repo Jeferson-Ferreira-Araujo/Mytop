@@ -19,9 +19,7 @@ export default function Home() {
     <div className="flex-1 flex flex-col">
       <header className="sticky top-0 z-10 border-b border-border bg-bg/80 backdrop-blur-md">
         <div className="mx-auto w-full max-w-6xl px-6 py-4 flex items-center justify-between gap-4">
-          <div className="bg-white/95 rounded-lg px-2.5 py-1.5">
-            <Image src="/logo.png" alt="SameTop" width={2172} height={724} className="h-6 w-auto" priority />
-          </div>
+          <Image src="/logo.png" alt="SameTop" width={2172} height={724} className="h-7 w-auto" priority />
           <div className="flex items-center gap-4">
             <button
               type="button"
