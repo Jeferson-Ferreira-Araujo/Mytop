@@ -2,13 +2,6 @@ import Link from "next/link";
 import { CollageCard } from "@/components/CollageCard";
 import { Avatar } from "@/components/Avatar";
 
-const STEPS = [
-  { emoji: "🎬", title: "Crie um Top", text: "Escolha o tema, quantas posições e o tempo da rodada." },
-  { emoji: "🔗", title: "Convide a galera", text: "Compartilhe o código da sala e todos entram na hora." },
-  { emoji: "⏱️", title: "Monte em tempo real", text: "Cada um busca e organiza seu ranking secretamente, contra o tempo." },
-  { emoji: "🏆", title: "Revele e compare", text: "No final, todo mundo descobre quem pensa parecido — ótimo pra live." },
-];
-
 const CATEGORY_ROW = [
   { emoji: "🎬", label: "Filmes e Séries" },
   { emoji: "🎵", label: "Música" },
@@ -18,18 +11,7 @@ const CATEGORY_ROW = [
   { emoji: "✨", label: "e muito mais" },
 ];
 
-const FAQS = [
-  { q: "Preciso criar conta?", a: "Não! Basta escolher um nome ou nick e entrar na sala. Tudo funciona direto no navegador." },
-  { q: "É de graça?", a: "Sim, criar e participar de salas é totalmente gratuito." },
-  { q: "Funciona no celular?", a: "Sim, o site inteiro foi pensado pra funcionar bem tanto no computador quanto no celular." },
-  { q: "Dá pra usar em live?", a: "Dá sim! A tela de comparação foi pensada pra ficar bonita gravada ou capturada no OBS." },
-];
-
-const NAV_LINKS = [
-  { href: "#como-funciona", label: "Como funciona" },
-  { href: "#categorias", label: "Categorias" },
-  { href: "#faq", label: "FAQ" },
-];
+const NAV_LINKS = [{ href: "#categorias", label: "Categorias" }];
 
 export default function Home() {
   return (
@@ -143,7 +125,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="categorias" className="mx-auto w-full max-w-5xl px-6 py-10 animate-fade-up">
+        <section id="categorias" className="mx-auto w-full max-w-5xl px-6 py-10 pb-16 animate-fade-up">
           <div className="grid grid-cols-3 sm:grid-cols-6 gap-6">
             {CATEGORY_ROW.map((c) => (
               <div key={c.label} className="flex flex-col items-center gap-2 text-center">
@@ -155,44 +137,7 @@ export default function Home() {
             ))}
           </div>
         </section>
-
-        <section id="como-funciona" className="mx-auto w-full max-w-6xl px-6 py-12">
-          <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-center mb-8">
-            Como funciona
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {STEPS.map((step, i) => (
-              <div
-                key={step.title}
-                className="glass-card rounded-2xl p-6 flex flex-col items-center text-center gap-2 animate-fade-up"
-                style={{ animationDelay: `${0.1 * i}s` }}
-              >
-                <span className="text-3xl">{step.emoji}</span>
-                <h3 className="font-display font-bold">{step.title}</h3>
-                <p className="text-sm text-text-muted">{step.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section id="faq" className="mx-auto w-full max-w-2xl px-6 py-12">
-          <h2 className="font-display text-2xl sm:text-3xl font-extrabold text-center mb-8">
-            Perguntas frequentes
-          </h2>
-          <div className="flex flex-col gap-3">
-            {FAQS.map((item) => (
-              <div key={item.q} className="glass-card rounded-2xl p-5">
-                <p className="font-display font-bold mb-1">{item.q}</p>
-                <p className="text-sm text-text-muted">{item.a}</p>
-              </div>
-            ))}
-          </div>
-        </section>
       </main>
-
-      <footer className="text-center text-xs text-text-muted py-6 border-t border-border">
-        SameTop — rankings em tempo real para grupos de amigos.
-      </footer>
     </div>
   );
 }
