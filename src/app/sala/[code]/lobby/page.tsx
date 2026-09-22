@@ -44,6 +44,24 @@ export default function LobbyPage({ params }: { params: Promise<{ code: string }
     onParticipantChange: refresh,
   });
 
+  // Realtime can miss an event (dropped websocket, tab backgrounded to
+  // copy the invite link, flaky mobile network, ...). Poll as a fallback
+  // and re-sync immediately whenever the tab regains focus.
+  useEffect(() => {
+    if (!room || room.status !== "lobby") return;
+    const interval = setInterval(() => {
+      void refresh();
+    }, 4000);
+    function onVisible() {
+      if (document.visibilityState === "visible") void refresh();
+    }
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [room, refresh]);
+
   useEffect(() => {
     if (room?.status === "running") {
       router.push(`/sala/${code}/montar`);
@@ -64,7 +82,8 @@ export default function LobbyPage({ params }: { params: Promise<{ code: string }
     setStarting(true);
     setError(null);
     try {
-      await startRoom(code, session!.sessionId);
+      const { room: updated } = await startRoom(code, session!.sessionId);
+      setRoom(updated);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao iniciar");
       setStarting(false);

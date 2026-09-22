@@ -33,6 +33,18 @@ const CATEGORY_GROUPS: { label: string; options: { value: Category; emoji: strin
   },
 ];
 
+const THEME_PLACEHOLDER: Record<Category, string> = {
+  movie: 'Ex: "Top 10 filmes de terror"',
+  tv: 'Ex: "Top 5 séries de anime"',
+  movie_character: 'Ex: "Top 10 vilões do cinema"',
+  music_track: 'Ex: "Top 10 músicas do Linkin Park"',
+  music_artist: 'Ex: "Top 5 bandas de rock"',
+  music_album: 'Ex: "Top 10 álbuns dos anos 2000"',
+  game: 'Ex: "Top 5 jogos de PS2"',
+  food: 'Ex: "Top 10 comidas brasileiras"',
+  general: 'Ex: "Top 10 cidades para viajar"',
+};
+
 const TOP_SIZE_OPTIONS = [3, 5, 10];
 const DURATION_OPTIONS = [
   { seconds: 120, label: "2 min" },
@@ -80,19 +92,7 @@ export default function CriarSalaPage() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-7">
         <div>
-          <label className="block font-semibold mb-2">Tema da sala</label>
-          <input
-            className="input-field w-full rounded-xl px-4 py-3"
-            placeholder='Ex: "Top 10 filmes de terror"'
-            value={theme}
-            onChange={(e) => setTheme(e.target.value)}
-            maxLength={120}
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block font-semibold mb-2">Categoria</label>
+          <label className="block font-semibold mb-2">1. Escolha a categoria</label>
           <div className="flex flex-col gap-3">
             {CATEGORY_GROUPS.map((group) => (
               <div key={group.label}>
@@ -116,6 +116,18 @@ export default function CriarSalaPage() {
               </div>
             ))}
           </div>
+        </div>
+
+        <div>
+          <label className="block font-semibold mb-2">2. Dê um nome ao Top</label>
+          <input
+            className="input-field w-full rounded-xl px-4 py-3"
+            placeholder={THEME_PLACEHOLDER[category]}
+            value={theme}
+            onChange={(e) => setTheme(e.target.value)}
+            maxLength={120}
+            required
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-6">

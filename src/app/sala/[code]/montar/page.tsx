@@ -99,6 +99,7 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
     try {
       const data = await getRoom(code);
       setParticipants(data.participants);
+      setRoom(data.room);
     } catch {
       // best-effort refresh
     }
@@ -125,9 +126,11 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
       setRemainingMs(remaining);
       if (remaining <= 0 && !finalizingRef.current) {
         finalizingRef.current = true;
-        finalizeRoom(code).catch(() => {
-          finalizingRef.current = false;
-        });
+        finalizeRoom(code)
+          .then(({ room: updated }) => setRoom(updated))
+          .catch(() => {
+            finalizingRef.current = false;
+          });
       }
     };
 
@@ -135,6 +138,26 @@ export default function MontarPage({ params }: { params: Promise<{ code: string 
     const interval = setInterval(tick, 250);
     return () => clearInterval(interval);
   }, [room?.ends_at, offset, code]);
+
+  // Realtime can miss an event (dropped websocket, tab backgrounded,
+  // flaky mobile network, ...). Poll as a fallback — e.g. so a client
+  // still finds out the round ended even if it never got the broadcast
+  // for another participant finishing everyone's list early — and
+  // re-sync immediately whenever the tab regains focus.
+  useEffect(() => {
+    if (!room || room.status !== "running") return;
+    const interval = setInterval(() => {
+      void refreshParticipants();
+    }, 5000);
+    function onVisible() {
+      if (document.visibilityState === "visible") void refreshParticipants();
+    }
+    document.addEventListener("visibilitychange", onVisible);
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener("visibilitychange", onVisible);
+    };
+  }, [room, refreshParticipants]);
 
   const locked = finished || (remainingMs !== null && remainingMs <= 0);
 
