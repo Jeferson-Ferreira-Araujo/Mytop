@@ -9,7 +9,7 @@ export type Category =
   | "food"
   | "general";
 
-export type Provider = "tmdb" | "deezer" | "igdb" | "themealdb" | "unsplash";
+export type Provider = "tmdb" | "deezer" | "igdb" | "themealdb" | "wikipedia" | "unsplash";
 
 export type RoomStatus = "lobby" | "running" | "reveal" | "finished";
 
