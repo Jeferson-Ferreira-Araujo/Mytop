@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createRoom } from "@/lib/api-client";
 import { saveRoomSession } from "@/lib/session";
@@ -89,6 +90,12 @@ export default function CriarSalaPage() {
 
   return (
     <main className="flex-1 mx-auto w-full max-w-2xl px-6 py-12 sm:py-16">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition mb-6"
+      >
+        ← Voltar
+      </Link>
       <h1 className="font-display text-3xl sm:text-4xl font-extrabold mb-2">
         Criar um <span className="gradient-text">Top</span>
       </h1>

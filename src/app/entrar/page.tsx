@@ -1,6 +1,7 @@
 "use client";
 
 import { Suspense, useState } from "react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { joinRoom } from "@/lib/api-client";
 import { saveRoomSession } from "@/lib/session";
@@ -30,6 +31,12 @@ function EntrarForm() {
 
   return (
     <main className="flex-1 mx-auto w-full max-w-md px-6 py-16 sm:py-24">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-1.5 text-sm text-text-muted hover:text-text transition mb-6"
+      >
+        ← Voltar
+      </Link>
       <h1 className="font-display text-3xl sm:text-4xl font-extrabold mb-2">
         Entrar em uma <span className="gradient-text">sala</span>
       </h1>
