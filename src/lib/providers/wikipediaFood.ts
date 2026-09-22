@@ -9,9 +9,9 @@ interface WikiPage {
 
 const USER_AGENT = "SameTop/1.0 (https://sametop.vercel.app)";
 
-// TheMealDB barely covers Brazilian/regional dishes (no "coxinha", "pão de
-// queijo", etc). Portuguese Wikipedia has solid coverage of these, so we
-// use it as a complementary source for the "food" category. Two calls:
+// Portuguese Wikipedia as the "food" category's search source — good
+// coverage of Brazilian dishes with a photo + short description, in the
+// audience's own language. Two calls:
 // 1) opensearch — title-prefix search, much more precise than full-text
 //    search (which pulled in unrelated pages like "São Paulo" or random
 //    song titles just for sharing a word with the query).
@@ -60,10 +60,13 @@ export async function searchWikipediaFood(query: string): Promise<SearchResultIt
   const byTitle = new Map(pages.map((p) => [p.title, p]));
 
   // Re-order to match opensearch's relevance ranking (the query endpoint
-  // doesn't preserve it), keep only entries with a photo.
+  // doesn't preserve it); keep only entries with a photo, and drop ones
+  // that are clearly places (towns/cities/regions often share a name with
+  // a dish — e.g. "Açailândia" or "Acaiaca" turning up for "açaí").
   return titles
     .map((title) => byTitle.get(title))
     .filter((p): p is WikiPage & { pageid: number } => !!p?.thumbnail)
+    .filter((p) => !isPlace(p.description) && !isPlace(placeHintFromTitle(p.title)))
     .slice(0, 6)
     .map((p) => ({
       provider: "wikipedia" as const,
@@ -78,6 +81,26 @@ export async function searchWikipediaFood(query: string): Promise<SearchResultIt
 
 function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// Anchored to the start: Wikipedia's short descriptions for actual places
+// *begin* with the classification (e.g. "Município brasileiro do estado
+// de..."). Matching anywhere in the string would also catch dishes whose
+// description just mentions a state in passing (e.g. "Açaí na tigela" →
+// "...originário do estado do Pará").
+const PLACE_PATTERN =
+  /^(municipio|cidade|capital d|distrito|provincia|regiao|estado d[eo]|unidade federativa|bairro|freguesia|aldeia|vila d|comuna|condado|ilha d|planeta|estrela|constelacao)/;
+
+function placeHintFromTitle(title: string): string | undefined {
+  // Wikipedia disambiguates places in the title itself when there's no
+  // short description, e.g. "Acaia (província romana)".
+  const match = title.match(/\(([^)]+)\)\s*$/);
+  return match?.[1];
+}
+
+function isPlace(description: string | undefined) {
+  if (!description) return false;
+  return PLACE_PATTERN.test(normalize(description));
 }
 
 function normalize(s: string) {

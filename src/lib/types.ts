@@ -9,7 +9,7 @@ export type Category =
   | "food"
   | "general";
 
-export type Provider = "tmdb" | "deezer" | "igdb" | "themealdb" | "wikipedia" | "unsplash";
+export type Provider = "tmdb" | "deezer" | "igdb" | "wikipedia" | "unsplash";
 
 export type RoomStatus = "lobby" | "running" | "reveal" | "finished";
 
@@ -96,6 +96,6 @@ export const CATEGORY_PROVIDER: Record<Category, Provider> = {
   music_artist: "deezer",
   music_album: "deezer",
   game: "igdb",
-  food: "themealdb",
+  food: "wikipedia",
   general: "unsplash",
 };
