@@ -1,6 +1,6 @@
 "use client";
 
-const PALETTE = ["#ff5a5f", "#ffb648", "#2dd4bf", "#ffd166", "#22c58b", "#ef4565", "#5b8def"];
+const PALETTE = ["#3b82f6", "#ec4899", "#22d3ee", "#22c58b", "#ef4565", "#84cc16", "#0ea5e9"];
 
 function colorForName(name: string) {
   let hash = 0;

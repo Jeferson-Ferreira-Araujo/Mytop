@@ -1,16 +1,15 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #0a0a0f;
-  --bg-elevated: #15151d;
-  --bg-card: #1a1a24;
-  --border: #292a36;
-  --text: #f7f6f9;
-  --text-muted: #93939f;
-  --primary: #ff5a5f;
-  --primary-2: #ffb648;
-  --accent: #2dd4bf;
-  --gold: #ffd166;
+  --bg: #090a10;
+  --bg-elevated: #141620;
+  --bg-card: #181a26;
+  --border: #262939;
+  --text: #f5f6fa;
+  --text-muted: #8b8fa3;
+  --primary: #3b82f6;
+  --primary-2: #ec4899;
+  --accent: #22d3ee;
   --success: #22c58b;
   --danger: #ef4565;
 }
@@ -25,7 +24,6 @@
   --color-primary: var(--primary);
   --color-primary-2: var(--primary-2);
   --color-accent: var(--accent);
-  --color-gold: var(--gold);
   --color-success: var(--success);
   --color-danger: var(--danger);
   --font-sans: var(--font-body);
@@ -42,8 +40,8 @@ html {
 }
 
 body {
-  background: radial-gradient(circle at 15% -10%, #3a1620 0%, transparent 45%),
-    radial-gradient(circle at 100% 0%, #3a2306 0%, transparent 42%),
+  background: radial-gradient(circle at 15% -10%, #0f2a4a 0%, transparent 45%),
+    radial-gradient(circle at 100% 0%, #3a1030 0%, transparent 42%),
     radial-gradient(circle at 50% 120%, #0d2420 0%, transparent 40%),
     var(--bg);
   color: var(--text);
@@ -69,7 +67,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(90deg, var(--primary), var(--gold));
+  background: linear-gradient(90deg, var(--primary), var(--primary-2));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;

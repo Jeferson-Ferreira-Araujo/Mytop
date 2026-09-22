@@ -3,7 +3,7 @@
 import type { Highlight, HighlightType } from "@/lib/highlights";
 
 const STYLES: Record<HighlightType, { label: string; color: string }> = {
-  unanime: { label: "Unânime", color: "var(--gold)" },
+  unanime: { label: "Unânime", color: "var(--primary-2)" },
   maior_consenso: { label: "Maior consenso", color: "var(--success)" },
   maior_discordancia: { label: "Maior discordância", color: "var(--danger)" },
   escolha_unica: { label: "Escolha única", color: "var(--accent)" },

@@ -14,7 +14,7 @@ const displayFont = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Tops — monte, compare, descubra",
+  title: "SameTop — monte, compare, descubra",
   description:
     "Crie um Top, convide seus amigos e descubra quem pensa como você. Rankings em tempo real para grupos, lives e vídeos.",
 };
