@@ -55,7 +55,9 @@ export default function CriarSalaPage() {
   const router = useRouter();
   const [category, setCategory] = useState<Category>("movie");
   const [topSize, setTopSize] = useState(10);
+  const [topSizeText, setTopSizeText] = useState("10");
   const [durationSeconds, setDurationSeconds] = useState(180);
+  const [durationText, setDurationText] = useState("3");
   const [theme, setTheme] = useState(() => autoTheme("movie", 10));
   const [themeTouched, setThemeTouched] = useState(false);
   const [hostName, setHostName] = useState("");
@@ -72,19 +74,63 @@ export default function CriarSalaPage() {
 
   function handleTopSizeChange(next: number) {
     setTopSize(next);
+    setTopSizeText(String(next));
     if (!themeTouched) setTheme(autoTheme(category, next));
+  }
+
+  // While typing a custom value, don't clamp on every keystroke — that
+  // fights the user (e.g. typing "23" gets clamped to "3" the instant the
+  // "2" lands, since 2 is below the minimum). Only clamp once they're done,
+  // on blur.
+  function handleTopSizeTextChange(raw: string) {
+    setTopSizeText(raw);
+    const n = parseInt(raw, 10);
+    if (Number.isInteger(n)) {
+      setTopSize(n);
+      if (!themeTouched) setTheme(autoTheme(category, n));
+    }
+  }
+
+  function handleTopSizeBlur() {
+    const n = parseInt(topSizeText, 10);
+    const clamped = Number.isInteger(n) ? Math.min(20, Math.max(3, n)) : topSize;
+    handleTopSizeChange(clamped);
+  }
+
+  function handleDurationChange(nextSeconds: number) {
+    setDurationSeconds(nextSeconds);
+    setDurationText(String(Math.round(nextSeconds / 60)));
+  }
+
+  function handleDurationTextChange(raw: string) {
+    setDurationText(raw);
+    const n = parseInt(raw, 10);
+    if (Number.isInteger(n)) setDurationSeconds(n * 60);
+  }
+
+  function handleDurationBlur() {
+    const n = parseInt(durationText, 10);
+    const clamped = Number.isInteger(n) ? Math.min(60, Math.max(1, n)) : Math.round(durationSeconds / 60);
+    handleDurationChange(clamped * 60);
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+
+    // Safety net in case the custom fields never blurred (e.g. Enter on
+    // mobile submits before the field loses focus).
+    const safeTopSize = Math.min(20, Math.max(3, parseInt(topSizeText, 10) || topSize));
+    const safeDurationSeconds =
+      Math.min(60, Math.max(1, parseInt(durationText, 10) || Math.round(durationSeconds / 60))) * 60;
+
     setLoading(true);
     try {
       const { room, session } = await createRoom({
         theme,
         category,
-        topSize,
-        durationSeconds,
+        topSize: safeTopSize,
+        durationSeconds: safeDurationSeconds,
         hostName,
       });
       saveRoomSession(room.code, session);
@@ -161,11 +207,9 @@ export default function CriarSalaPage() {
                 type="number"
                 min={3}
                 max={20}
-                value={topSize}
-                onChange={(e) => {
-                  const n = Number(e.target.value);
-                  if (Number.isInteger(n)) handleTopSizeChange(Math.min(20, Math.max(3, n)));
-                }}
+                value={topSizeText}
+                onChange={(e) => handleTopSizeTextChange(e.target.value)}
+                onBlur={handleTopSizeBlur}
                 className="input-field w-16 rounded-lg px-2 py-1 text-text text-sm"
               />
             </label>
@@ -178,7 +222,7 @@ export default function CriarSalaPage() {
                 <button
                   type="button"
                   key={d.seconds}
-                  onClick={() => setDurationSeconds(d.seconds)}
+                  onClick={() => handleDurationChange(d.seconds)}
                   className={`rounded-xl px-3 py-2.5 border transition font-semibold ${
                     durationSeconds === d.seconds
                       ? "border-primary bg-primary/15 text-white"
@@ -195,11 +239,9 @@ export default function CriarSalaPage() {
                 type="number"
                 min={1}
                 max={60}
-                value={Math.round(durationSeconds / 60)}
-                onChange={(e) => {
-                  const n = Number(e.target.value);
-                  if (Number.isInteger(n)) setDurationSeconds(Math.min(60, Math.max(1, n)) * 60);
-                }}
+                value={durationText}
+                onChange={(e) => handleDurationTextChange(e.target.value)}
+                onBlur={handleDurationBlur}
                 className="input-field w-16 rounded-lg px-2 py-1 text-text text-sm"
               />
             </label>
