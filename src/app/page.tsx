@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { CollageCard } from "@/components/CollageCard";
 
@@ -18,9 +19,9 @@ export default function Home() {
     <div className="flex-1 flex flex-col">
       <header className="sticky top-0 z-10 border-b border-border bg-bg/80 backdrop-blur-md">
         <div className="mx-auto w-full max-w-6xl px-6 py-4 flex items-center justify-between gap-4">
-          <span className="flex items-center gap-2 font-display font-extrabold text-lg">
-            <span aria-hidden>👑</span> SameTop
-          </span>
+          <div className="bg-white/95 rounded-lg px-2.5 py-1.5">
+            <Image src="/logo.png" alt="SameTop" width={2172} height={724} className="h-6 w-auto" priority />
+          </div>
           <div className="flex items-center gap-4">
             <button
               type="button"
@@ -63,24 +64,24 @@ export default function Home() {
               <MiniTopCard className="col-span-3" />
               <CollageCard
                 emoji="🎬"
-                from="#3b82f6"
-                to="#1e3a8a"
+                from="#f59e0b"
+                to="#7c2d12"
                 imageSrc="/collage/filme-mario.webp"
                 imageAlt="Card de filme"
                 className="aspect-square"
               />
               <CollageCard
                 emoji="🍕"
-                from="#ec4899"
-                to="#831843"
+                from="#fbbf24"
+                to="#92400e"
                 imageSrc="/collage/comida-pizza.jpg"
                 imageAlt="Card de comida"
                 className="aspect-square"
               />
               <CollageCard
                 emoji="🎤"
-                from="#22d3ee"
-                to="#0e7490"
+                from="#facc15"
+                to="#a16207"
                 imageSrc="/collage/musica-link_park.jpg"
                 imageAlt="Card de música"
                 className="aspect-square"
@@ -88,20 +89,32 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Desktop: rotated overlapping collage, ready for real artwork later */}
-          <div className="hidden lg:block relative h-[420px] animate-fade-up" style={{ animationDelay: "0.1s" }}>
+          {/* Desktop: structured overlapping collage, ready for real artwork later */}
+          <div
+            className="hidden lg:block relative h-[460px] max-w-[480px] mx-auto w-full animate-fade-up"
+            style={{ animationDelay: "0.1s" }}
+          >
             <MiniTopCard
-              className="absolute w-44"
-              style={{ top: "4%", left: "2%", transform: "rotate(-7deg)" }}
+              className="absolute w-44 z-20"
+              style={{ top: "0%", left: "0%", transform: "rotate(-6deg)" }}
             />
             <CollageCard
               emoji="🦹"
-              from="#3b82f6"
-              to="#1e3a8a"
+              from="#f59e0b"
+              to="#7c2d12"
               imageSrc="/collage/filme-mario.webp"
               imageAlt="Card de filme"
-              className="absolute w-36 h-48"
-              style={{ top: "8%", left: "42%", transform: "rotate(4deg)" }}
+              className="absolute"
+              style={{ top: "15%", left: "0%", width: 150, height: 200, transform: "rotate(-3deg)" }}
+            />
+            <CollageCard
+              emoji="🍕"
+              from="#fbbf24"
+              to="#92400e"
+              imageSrc="/collage/comida-pizza.jpg"
+              imageAlt="Card de comida"
+              className="absolute"
+              style={{ top: "6%", left: "34%", width: 150, height: 200, transform: "rotate(2deg)" }}
             />
             <CollageCard
               emoji="⚔️"
@@ -109,35 +122,26 @@ export default function Home() {
               to="#1a1a24"
               imageSrc="/collage/series-snow.jpg"
               imageAlt="Card de série"
-              className="absolute w-36 h-48"
-              style={{ top: "0%", right: "2%", transform: "rotate(6deg)" }}
-            />
-            <CollageCard
-              emoji="🍕"
-              from="#ec4899"
-              to="#831843"
-              imageSrc="/collage/comida-pizza.jpg"
-              imageAlt="Card de comida"
-              className="absolute w-32 h-32"
-              style={{ top: "46%", left: "6%", transform: "rotate(-5deg)" }}
+              className="absolute"
+              style={{ top: "0%", left: "68%", width: 150, height: 200, transform: "rotate(4deg)" }}
             />
             <CollageCard
               emoji="🎤"
-              from="#22d3ee"
-              to="#0e7490"
+              from="#facc15"
+              to="#a16207"
               imageSrc="/collage/musica-link_park.jpg"
               imageAlt="Card de música"
-              className="absolute w-32 h-40"
-              style={{ bottom: "2%", left: "30%", transform: "rotate(-4deg)" }}
+              className="absolute"
+              style={{ top: "58%", left: "18%", width: 150, height: 200, transform: "rotate(-4deg)" }}
             />
             <CollageCard
               emoji="🎮"
-              from="#84cc16"
-              to="#3b82f6"
+              from="#eab308"
+              to="#78350f"
               imageSrc="/collage/jogo-elder.jpg"
               imageAlt="Card de game"
-              className="absolute w-32 h-32"
-              style={{ bottom: "0%", right: "6%", transform: "rotate(5deg)" }}
+              className="absolute"
+              style={{ top: "54%", left: "52%", width: 150, height: 200, transform: "rotate(5deg)" }}
             />
           </div>
         </section>

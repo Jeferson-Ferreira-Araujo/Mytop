@@ -44,5 +44,6 @@ next-env.d.ts
 .vercel
 .env*
 
-# raw source images the user drops in before they're copied into public/collage
+# raw source images the user drops in before they're copied into public/
 /imagens_inicial
+/imagens
